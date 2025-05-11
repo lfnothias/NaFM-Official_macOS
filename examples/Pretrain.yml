@@ -1,0 +1,51 @@
+# training settings
+num_epochs: 300
+lr: 0.0001
+lr_min: 1.e-5
+weight_decay: 1.e-5
+early_stopping_patience: null
+
+# dataset specific
+dataset_root: ./coconut_data
+mask_ratio: 0.20
+dataset: null
+dataset_arg: null
+confine_training: null
+num_train_samples: null
+confine_ratio: null
+
+# dataloader specific
+reload: 0
+batch_size: 256
+inference_batch_size: 256
+splits: null
+train_size: 0.9
+val_size: 0.1
+test_size: 0.0
+num_workers: 20
+
+# architectural specific
+emb_dim: 1024
+num_layer: 6
+feat_dim: 512
+drop_ratio: 0.1
+linear_drop_ratio: null
+temperature: 0.1
+pretrained_path: null
+gnn_type: gin
+freeze: null
+use_loss_weights_schedule: false
+loss_weights_schedule_type: null
+arch_chosen: mlm only
+
+# other specific
+ngpus: -1
+num_nodes: 1
+precision: 32
+log_dir: ./pretrained_logs
+seed: 1
+distributed_backend: ddp
+accelerator: gpu
+save_interval: 10
+task: pretrain
+
