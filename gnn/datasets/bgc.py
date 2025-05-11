@@ -45,7 +45,7 @@ class BGC(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return ["data.csv"]
+        return ["bgc_data.csv"]
 
     @property
     def processed_file_names(self):

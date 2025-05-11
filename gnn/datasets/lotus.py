@@ -37,7 +37,7 @@ class Lotus(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return ["data.csv"]
+        return ["lotus_data.csv"]
 
     @property
     def processed_file_names(self):

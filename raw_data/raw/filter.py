@@ -55,5 +55,5 @@ print(len(clean_smiles))  # 405468
 print(0 in clean_smiles)  # False
 
 # Save the cleaned SMILES list to a pickle file
-with open("clean_smiles.pkl", "wb") as f:
+with open("pretrain_smiles.pkl", "wb") as f:
     pickle.dump(clean_smiles, f, protocol=4)
