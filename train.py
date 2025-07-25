@@ -279,24 +279,36 @@ def main():
         args.log_dir, name="tensorbord", version="", default_hp_metric=False
     )
     csv_logger = CSVLogger(args.log_dir, name="", version="")
-    ddp_plugin = DDPStrategy(find_unused_parameters=False)
 
-    trainer = pl.Trainer(
-        log_every_n_steps=50,
-        max_epochs=args.num_epochs,
-        accelerator='gpu',
-        devices=args.ngpus,
-        num_nodes=args.num_nodes,
-        default_root_dir=args.log_dir,
-        callbacks=callbacks,
-        logger=[tb_logger, csv_logger],
-        reload_dataloaders_every_n_epochs=args.reload,
-        precision=args.precision,
-        strategy=ddp_plugin,
-        enable_progress_bar=True,
-        gradient_clip_val=1.0,
-        gradient_clip_algorithm="norm",
-    )
+    num_devices = args.ngpus if args.accelerator != "cpu" else 1
+
+    # before Trainer: decide whether to use DDP
+    ddp_plugin = DDPStrategy(find_unused_parameters=False) if args.accelerator != "cpu" else None
+
+    # build common Trainer kwargs
+    trainer_kwargs = {
+        "log_every_n_steps": 50,
+        "max_epochs":           args.num_epochs,
+        "accelerator":          args.accelerator,
+        # CPUAccelerator expects an int > 0; for GPU this is # of GPUs
+        "devices":              args.ngpus if args.accelerator != "cpu" else 1,
+        "num_nodes":            args.num_nodes,
+        "default_root_dir":     args.log_dir,
+        "callbacks":            callbacks,
+        "logger":               [tb_logger, csv_logger],
+        "reload_dataloaders_every_n_epochs": args.reload,
+        "precision":            args.precision,
+        "enable_progress_bar":  True,
+        "gradient_clip_val":    1.0,
+        "gradient_clip_algorithm": "norm",
+    }
+
+    # only insert strategy when on GPU
+    if ddp_plugin is not None:
+        trainer_kwargs["strategy"] = ddp_plugin
+
+    # instantiate the Trainer with your assembled kwargs
+    trainer = pl.Trainer(**trainer_kwargs)
 
     trainer.fit(model, datamodule=data)
 
