@@ -37,7 +37,7 @@ class NPC(InMemoryDataset):
             
     @property
     def raw_file_names(self):
-        return ["data.csv"]
+        return ["regression_data.csv"]
 
     @property
     def processed_file_names(self):

@@ -36,7 +36,7 @@ class External(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return ["data.csv"]
+        return ["external_data.csv"]
 
     @property
     def processed_file_names(self):

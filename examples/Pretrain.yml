@@ -6,7 +6,7 @@ weight_decay: 1.e-5
 early_stopping_patience: null
 
 # dataset specific
-dataset_root: ./coconut_data
+dataset_root: ./raw_data
 mask_ratio: 0.20
 dataset: null
 dataset_arg: null

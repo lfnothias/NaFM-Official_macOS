@@ -39,7 +39,7 @@ class Ontology(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return ["data.csv"]
+        return ["classification_data.csv"]
 
     @property
     def processed_file_names(self):

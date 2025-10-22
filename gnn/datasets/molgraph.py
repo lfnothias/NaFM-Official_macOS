@@ -43,7 +43,7 @@ class MolGraphDataset(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return ["clean_smiles.pkl"]
+        return ["pretrain_smiles.pkl"]
 
     @property
     def processed_file_names(self):
@@ -253,7 +253,7 @@ class MaskTransform(BaseTransform):
 
 
 if __name__ == "__main__":
-    dataset = MolGraphDataset(root="../../coconut_data", transform=MaskSubgraph(0.15))
+    dataset = MolGraphDataset(root="../../raw_data", transform=MaskSubgraph(0.15))
     dataloader = DataLoader(
         dataset,
         batch_size=2,

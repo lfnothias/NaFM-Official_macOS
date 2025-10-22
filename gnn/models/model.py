@@ -33,7 +33,7 @@ def create_pretrained_model(args):
     return model
 
 
-def create_finetuned_model(args, num_classes, freeze=True):
+def create_finetuned_model(args, num_classes, freeze=True, is_inference=False):
     gnn_args = dict(
         num_layer=args["num_layer"],
         emb_dim=args["emb_dim"],
@@ -41,7 +41,7 @@ def create_finetuned_model(args, num_classes, freeze=True):
         linear_drop_ratio=args["linear_drop_ratio"],
         gnn_type=args["gnn_type"],
     )
-    if args['pretrained_path'] is None:
+    if args['pretrained_path'] is None or is_inference:
         print("Train from scratch")
         model = FinetunedGNN(**gnn_args, num_classes=num_classes)
     else:

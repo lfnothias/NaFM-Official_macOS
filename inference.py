@@ -48,6 +48,13 @@ def get_args():
         type=str,
         help="downstream data file",
     )
+
+    parser.add_argument(
+        "--num-classes",
+        default=None,
+        type=int,
+        help="Number of classes for classification",
+    )
     
     parser.add_argument(
         "--checkpoint-path",
@@ -120,10 +127,15 @@ def get_molgraph(smiles_list: list, labels: list):
 def main():
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = FinetunedLNNP.load_from_checkpoint(checkpoint_path=args.checkpoint_path, num_classes=2)
+    model = FinetunedLNNP.load_from_checkpoint(
+        checkpoint_path=args.checkpoint_path,
+        num_classes=args.num_classes,
+        is_inference=True
+    )
     model = model.to(device)
     model.eval()
-    if task == 'screen':
+    
+    if args.task == 'screen':
         filter_data = pd.read_csv(args.downstream_data)
         to_filter = filter_data[filter_data['label'] == 0]
         smiles = to_filter['SMILES'].values
@@ -150,7 +162,7 @@ def main():
         results_df.to_csv('model_scores.csv', index=False)
         print("Results saved to model_scores.csv")
         
-    elif task == 'classification':
+    elif args.task == 'classification':
         # Load the data
         data = pd.read_csv(args.downstream_data)
         smiles = data['SMILES'].values
@@ -175,7 +187,7 @@ def main():
         results_df.to_csv('predictions.csv', index=False)
         print("Predictions saved to predictions.csv")
         
-    elif task == 'regression':
+    elif args.task == 'regression':
         data = pd.read_csv(args.downstream_data)
         smiles = data['SMILES'].values
         labels = [0 for _ in range(len(smiles))]

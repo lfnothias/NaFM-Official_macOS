@@ -24,14 +24,14 @@ test_size: 0.1
 num_workers: 12
 
 # architectural specific
-emb_dim: 2048
+emb_dim: 1024
 num_layer: 6
-feat_dim: 1024
+feat_dim: 512
 feat_dim: null
 drop_ratio: 0.1
 linear_drop_ratio: 0.3
 temperature: null
-pretrained_path: epoch=84-val_loss=1.6483.ckpt
+pretrained_path: NaFM.ckpt
 gnn_type: gin
 freeze: false
 
