@@ -37,16 +37,44 @@ pip install scipy==1.13.1
 If you're using older CUDA versions, please install compatible versions of PyTorch, PyTorch Lightning, and PyG manually.
 
 ## Data and checkpoint Preparation
-The pretrained weight are provided at [Zenodo](https://zenodo.org/records/15385335).
 
-We also provide the required datasets at [Figshare](https://doi.org/10.6084/m9.figshare.28980254.v1).
+### Automated Setup (Recommended)
+
+We provide automated scripts to download and organize all required data:
+
+**Quick Setup (Recommended):**
+```bash
+# One-command complete setup and validation
+python setup.py
+```
+
+**Manual Setup:**
+```bash
+# Download all data and weights
+python scripts/setup_data.py
+
+# Skip specific downloads if needed
+python scripts/setup_data.py --skip-zenodo    # Skip pre-trained weights
+python scripts/setup_data.py --skip-figshare  # Skip datasets
+
+# Verify existing setup
+python scripts/setup_data.py --verify-only
+```
+
+### Manual Setup
+
+If you prefer manual setup, download the files from:
+
+- **Pre-trained weights**: [Zenodo](https://zenodo.org/records/15385335) → `NaFM.ckpt`
+- **Datasets**: [Figshare](https://doi.org/10.6084/m9.figshare.28980254.v1) → Extract to appropriate directories
 
 Place the files as follows:
 ```
 NaFM/
+├── NaFM.ckpt                          # Pre-trained weights (from Zenodo)
 ├── raw_data/
 │   └── raw/
-│       └── pretrain_smiles.pkl
+│       └── pretrain_smiles.pkl        # Pre-training SMILES data
 ├── downstream_data/
 │   ├── Ontology/
 │   │   └── raw/classification_data.csv
@@ -59,6 +87,32 @@ NaFM/
 │   └── External/
 │       └── raw/external_data.csv
 ```
+
+### Verification
+
+After setup, verify your installation:
+
+```bash
+python scripts/validate_setup.py
+```
+
+This will check:
+- Python version compatibility
+- All dependencies
+- Data file integrity  
+- Model loading capability
+- Platform-specific issues
+
+## Scripts Directory
+
+The `scripts/` directory contains utility scripts for setup and validation:
+
+- `scripts/setup_data.py` - Automated data download and organization
+- `scripts/validate_setup.py` - Comprehensive setup validation  
+- `scripts/run_setup.py` - Combined setup and validation
+- `scripts/README.md` - Detailed script documentation
+
+See `scripts/README.md` for complete script documentation and options.
 
 ## Pre-training
 
@@ -146,7 +200,8 @@ For inference on new SMILES:
 ```
 python inference.py --task regression \
 --downstream-data [data location] \
---checkpoint-path [your finetuned model path]
+--checkpoint-path [your finetuned model path] \
+--num-classes [data classes]
 ```
 
 Output will be saved in `NaFM/predictions.csv`.

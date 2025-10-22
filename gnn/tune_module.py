@@ -20,7 +20,7 @@ def calculate_ef1_percent(y_true, y_pred, threshold):
     return top_percent / total_percent if total_percent > 0 else 0
 
 class LNNP(LightningModule):
-    def __init__(self, hparams, num_classes):
+    def __init__(self, hparams, num_classes, is_inference=False):
         super(LNNP, self).__init__()
         
         self.num_classes = num_classes
@@ -28,7 +28,11 @@ class LNNP(LightningModule):
         if self.hparams['task'] == 'ecfp':
             self.model = create_ecfp4_model(self.hparams, num_classes)
         else:
-            self.model = create_finetuned_model(self.hparams, num_classes, freeze=self.hparams['freeze'])
+            self.model = create_finetuned_model(
+                self.hparams, num_classes,
+                freeze=self.hparams['freeze'],
+                is_inference=is_inference
+            )
         
         self._reset_losses_dict()
         
